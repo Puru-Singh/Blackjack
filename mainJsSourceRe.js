@@ -1,5 +1,7 @@
 var suits = ["Spades", "Hearts", "Diamonds", "Clubs"],
     values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"],
+    //cardWord = {'2':'Two of ', '3':'Three of ', '4':'Four of ', '5':'Five of ', '6':'Six of ', '7':'Seven of ', '8':'Eight of ', '9':'Nine of ', '10':'Ten of ', 'J':'Joker of ', 'Q':'Queen of ', 'K':'King of ', 'A':'Ace of '},
+    cardWord = ['Two of ', 'Three of ', 'Four of ', 'Five of ','Six of ', 'Seven of ', 'Eight of ', 'Nine of ', 'Ten of ', 'Joker of ', 'Queen of ', 'King of ', 'Ace of '],
     deck = new Array(),
     balance = 100;
 
@@ -10,6 +12,8 @@ var suits = ["Spades", "Hearts", "Diamonds", "Clubs"],
     playerPanel = document.getElementById('playerScore'),
     dealerPanel = document.getElementById('dealerScore'),
     resultPanel = document.getElementById('result'),
+    playerCardsPanel = document.getElementById('playerCards'),
+    dealerCardsPanel = document.getElementById('dealerCards'),
 
     gameStarted = false,
     gameOver = false,
@@ -25,6 +29,8 @@ stayButton.style.display = 'none';
 playerPanel.style.display = 'none';
 dealerPanel.style.display = 'none';
 resultPanel.style.display = 'none';
+playerCardsPanel.style.display = 'none';
+dealerCardsPanel.style.display = 'none';
 
 function generateDeck()
 {
@@ -40,7 +46,8 @@ function generateDeck()
                 weight = 11;
             else
                 weight = parseInt(values[i]);
-            card = {Value: values[i], Suit: suits[j], Weight: weight};
+
+            card = {Value: values[i], Suit: suits[j], Weight: weight, Name: cardWord[i]+suits[j]};
             deck.push(card);
         }
     }
@@ -69,11 +76,16 @@ function startBlackjack()
     playerPanel.style.display = 'inline';
     resultPanel.style.display = 'none';
     dealerPanel.style.display = 'none';
+    playerCardsPanel.style.display = 'inline';
+    dealerCardsPanel.style.display = 'none';
+
     gameStarted = true;
     gameOver = false;
     playerWon = false;
     dealerWon = false;
     playerActive = true;
+    text = '';
+
     generateDeck();
     shuffle();
     dealCards();
@@ -84,13 +96,30 @@ function updateUI()
 {
     if(gameOver == false)
     {
-        playerPanel.innerHTML = 'Player Score = ' + playerScore;
+        playerPanel.innerHTML = 'Player Score = ' + playerScore + '\nNumber of cards = ' + playerCards.length;
+        playerCardsPanel.innerHTML = '';
+        for(var i=0 ; i<playerCards.length ; i++)
+        {
+            playerCardsPanel.innerHTML += playerCards[i].Name + '<br/>';
+        }
     }
     else
     {
-        playerPanel.innerHTML = 'Player Score = ' + playerScore;
+        playerPanel.innerHTML = 'Player Score = ' + playerScore + '\nNumber of cards = ' + playerCards.length;
         dealerPanel.style.display = 'inline';
-        dealerPanel.innerHTML = 'Dealer Score = ' + dealerScore;
+        dealerCardsPanel.style.display = 'inline';
+        dealerPanel.innerHTML = 'Dealer Score = ' + dealerScore + '\nNumber of cards = ' + dealerCards.length;
+
+        playerCardsPanel.innerHTML = '';
+        for(var i=0 ; i<playerCards.length ; i++)
+        {
+            playerCardsPanel.innerHTML += playerCards[i].Name + '<br/>';
+        }
+        dealerCardsPanel.innerHTML = '';
+        for(var i=0 ; i<dealerCards.length ; i++)
+        {
+            dealerCardsPanel.innerHTML += dealerCards[i].Name + '<br/>';
+        }
     }
 }
 
@@ -121,18 +150,21 @@ function checkDefaultWin()
     {
         gameOver = true;
         playerWon = dealerWon = false;
+        text = 'Default: ';
         endBlackjack();
     }
     else if(playerScore == 21)
     {
         gameOver = true;
         playerWon = true;
+        text = 'Default win: ';
         endBlackjack();
     }
     else if(dealerScore == 21)
     {
         gameOver = true;
         dealerWon = true;
+        text = 'Default win: ';
         endBlackjack();
     }
 }
@@ -223,22 +255,26 @@ function stay()
 
 function endBlackjack()
 {
-    //checkWin();
+    if(gameOver == false)
+    {
+        checkWin();
+    }
     updateUI();
     hitButton.style.display = 'none';
     stayButton.style.display = 'none';
+    text = '';
     if(playerWon)
     {
-        text = 'Player Won.';
+        text += 'Player Won.';
         balance += 20;
     }
     else if(dealerWon)
     {
-        text = 'Dealer Won.';
+        text += 'Dealer Won.';
         balance -= 20;
     }
     else
-        text = 'Game Draw.';
+        text += 'Game Draw.';
     resultPanel.innerHTML = text + ' Balance = ' + balance;
     resultPanel.style.display = 'inline';
     newGameButton.style.display = 'inline';

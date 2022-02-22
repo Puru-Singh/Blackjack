@@ -4,18 +4,26 @@
     </head>
     <body>
         <div class="game">
-            <h1>Blackjack by Puru Singh</h1>
+            <h1>Blackjack</h1>
+            <h4>by Puru Singh</h4>
             <div id="result"></div>
             <div class="game-body">
 
-                <div class="player" id="playerScore"></div>
-                <div class="player" id="dealerScore"></div>
+                <div class="playerScore" id="playerScore" ></div>
+                
+                <div class="playerCards" id="playerCards"></div>
+            
+                <div class="dealerScore" id="dealerScore"></div>
+
+                <div class="dealerCards" id="dealerCards"></div>
                 <!-- <div class="player" id="result"></div> -->
                 
                 <div class="game-options">
-                    <button id="new-game-button" class="btn" onclick="startBlackjack()">Start</button>
-                    <button id='hit-button' class="btn" onclick="hitHTML()">Hit</button>
-                    <button id='stay-button' class="btn" onclick="stay()">Stay</button>
+                    <button style = "position:relative; top:100px;" id="new-game-button" class="btn" onclick="startBlackjack()">Start</button>
+                    
+                    <button style = "position:relative; left:-80px; top:100px;" id='hit-button' class="btn" onclick="hitHTML()">Hit</button>
+
+                    <button style = "position:relative; left:80px; top:100px;" id='stay-button' class="btn" onclick="stay()">Stay</button>
 
                 </div>
             </div>
