@@ -1,6 +1,5 @@
 var suits = ["Spades", "Hearts", "Diamonds", "Clubs"],
     values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"],
-    //cardWord = {'2':'Two of ', '3':'Three of ', '4':'Four of ', '5':'Five of ', '6':'Six of ', '7':'Seven of ', '8':'Eight of ', '9':'Nine of ', '10':'Ten of ', 'J':'Joker of ', 'Q':'Queen of ', 'K':'King of ', 'A':'Ace of '},
     cardWord = ['Two of ', 'Three of ', 'Four of ', 'Five of ','Six of ', 'Seven of ', 'Eight of ', 'Nine of ', 'Ten of ', 'Joker of ', 'Queen of ', 'King of ', 'Ace of '],
     deck = new Array(),
     balance = 100;
@@ -11,6 +10,7 @@ var suits = ["Spades", "Hearts", "Diamonds", "Clubs"],
     stayButton = document.getElementById('stay-button'),
     playerPanel = document.getElementById('playerScore'),
     dealerPanel = document.getElementById('dealerScore'),
+    balancePanel = document.getElementById('balance'),
     resultPanel = document.getElementById('result'),
     playerCardsPanel = document.getElementById('playerCards'),
     dealerCardsPanel = document.getElementById('dealerCards'),
@@ -24,6 +24,7 @@ var suits = ["Spades", "Hearts", "Diamonds", "Clubs"],
     playerWon = false,
     playerActive = true;
 
+balancePanel.style.display = 'inline';
 hitButton.style.display = 'none';
 stayButton.style.display = 'none';
 playerPanel.style.display = 'none';
@@ -70,6 +71,7 @@ function shuffle()
 
 function startBlackjack()
 {
+    balancePanel.innerHTML = 'Balance = ' + balance;
     newGameButton.style.display = 'none';
     hitButton.style.display = 'inline';
     stayButton.style.display = 'inline';
@@ -240,14 +242,11 @@ function stay()
         //checkWin();
         //if(dealerWon == false)
         //{
-            if(dealerScore < 17)
-            {
-                hit(false);
-                /*
-                if(gameOver == false)
-                    checkWin();
-                */
-            }
+            //if(dealerScore < 17)
+        while(dealerBrain())
+        {
+            hit(false);
+        }
         //}
         endBlackjack();
     }
@@ -275,7 +274,24 @@ function endBlackjack()
     }
     else
         text += 'Game Draw.';
-    resultPanel.innerHTML = text + ' Balance = ' + balance;
+    balancePanel.innerHTML = 'Balance = ' + balance;
+    resultPanel.innerHTML = text;
     resultPanel.style.display = 'inline';
     newGameButton.style.display = 'inline';
+}
+
+function dealerBrain()
+{
+    var reqScore = 21 - dealerScore;
+    var favorableCards = reqScore*4 - playerCards.length;
+    for(var i=0 ; i<dealerCards.length ; i++)
+    {
+        if(dealerCards[i].weight <= reqScore)
+            favorableCards-=1;
+    }
+    var chance = (100*favorableCards)/deck.length;
+    if(chance > 30)
+        return true;
+    else
+        return false;
 }

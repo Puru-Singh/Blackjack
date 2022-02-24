@@ -30,12 +30,6 @@
     transition: background-color 1s ease 0s;
 }
 
-.game h3
-{
-padding: 10px;
-background:black;
-color:white;
-}
 
 .game .game-body
 {
@@ -74,7 +68,9 @@ color:white;
     vertical-align: top;
     background:#f5f5f5;
     position: absolute;
-    right: 30px;
+    bottom: -200px;
+    /*right: 573px;*/
+    left: 30px;
 }
 
 .dealerScore{
@@ -87,9 +83,8 @@ color:white;
     vertical-align: top;
     background:#f5f5f5;
     position: absolute;
-    bottom: -200px;
-    /*right: 573px;*/
-    left: 30px;
+    right: 30px;
+    
 }
 
 .dealerCards{
@@ -105,11 +100,4 @@ color:white;
     right: 30px;
     bottom: -200px;
 }
-
-/*.btn
-{
-    background:#222;
-    color:white !important;
-    border-radius:0px;
-}*/
 
