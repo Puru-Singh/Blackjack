@@ -22,7 +22,9 @@ var suits = ["Spades", "Hearts", "Diamonds", "Clubs"],
     playerScore = 0,
     dealerScore = 0,
     playerWon = false,
-    playerActive = true;
+    playerActive = true,
+    playerAceFlag = false,
+    dealerAceFlag = false;
 
 balancePanel.style.display = 'inline';
 hitButton.style.display = 'none';
@@ -86,6 +88,8 @@ function startBlackjack()
     playerWon = false;
     dealerWon = false;
     playerActive = true;
+    playerAceFlag = false;
+    dealerAceFlag = false;
     text = '';
 
     generateDeck();
@@ -133,15 +137,11 @@ function dealCards()
     dealerCards.length = 0;
     for(var i=0 ; i<2 ; i++)
     {
-        var card = deck.pop();
-        playerScore += card.Weight;
-        playerCards.push(card);
+        hit(true);
     }
     for(var i=0 ; i<2 ; i++)
     {
-        card = deck.pop();
-        dealerScore += card.Weight;
-        dealerCards.push(card);
+        hit(false);
     }
     checkDefaultWin();
 }
@@ -202,16 +202,27 @@ function hit(flag)
     card = deck.pop();
     if(flag == true)
     {
+        if(card.Value == 'A')
+        {
+            if(playerAceFlag == true)
+                card.Weight = 1;
+            else
+                playerAceFlag = true;
+        }
         playerScore += card.Weight;
         playerCards.push(card);
     }
     else
     {
-        //while(dealerScore < 17)
-        //{
+        if(card.Value == 'A')
+        {
+            if(dealerAceFlag == true)
+                card.Weight = 1;
+            else
+                dealerAceFlag = true;
+        }
             dealerScore += card.Weight;
             dealerCards.push(card);
-        //}
     }
     checkBust();
 }
